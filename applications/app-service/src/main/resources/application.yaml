@@ -6,9 +6,13 @@ spring:
     name: crediYaAutenticacion
   devtools:
     add-properties: false
-  h2:
-    console:
-      enabled: true
-      path: /h2
   profiles:
     include:
+
+adapters:
+  r2dbc:
+    host: "localhost"
+    port: 3306
+    database: "autenticacion"
+    username: "app_user"
+    password: "juan*201"
