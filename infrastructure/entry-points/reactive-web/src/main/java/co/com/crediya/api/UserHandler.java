@@ -1,6 +1,8 @@
 package co.com.crediya.api;
 
-import co.com.crediya.model.user.User;
+import co.com.crediya.api.dto.SaveUserDto;
+import co.com.crediya.api.mapper.UserDtoMapper;
+import co.com.crediya.api.validator.RequestValidator;
 import co.com.crediya.usecase.signupnewuser.SignUpNewUserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -12,9 +14,12 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class UserHandler {
     private final SignUpNewUserUseCase signUpNewUserUseCase;
+    private final UserDtoMapper userDtoMapper;
 
     public Mono<ServerResponse> saveNewUser(ServerRequest request) {
-        return request.bodyToMono(User.class)
+        return request.bodyToMono(SaveUserDto.class)
+                .transform(RequestValidator.validate())
+                .map(userDtoMapper::toModel)
                 .flatMap(signUpNewUserUseCase::execute)
                 .flatMap(ServerResponse.ok()::bodyValue);
     }
