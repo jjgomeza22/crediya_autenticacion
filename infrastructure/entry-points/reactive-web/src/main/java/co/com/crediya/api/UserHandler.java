@@ -5,7 +5,8 @@ import co.com.crediya.api.mapper.UserDtoMapper;
 import co.com.crediya.api.validator.RequestValidator;
 import co.com.crediya.log.Log;
 import co.com.crediya.log.Status;
-import co.com.crediya.usecase.signupnewuser.SignUpNewUserUseCase;
+import co.com.crediya.model.user.User;
+import co.com.crediya.usecase.IUseCaseMono;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
@@ -15,7 +16,7 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class UserHandler {
-    private final SignUpNewUserUseCase signUpNewUserUseCase;
+    private final IUseCaseMono<User, Void> signUpNewUserUseCase;
     private final UserDtoMapper userDtoMapper;
 
     private static final String EVENT = "saveNewUser";
