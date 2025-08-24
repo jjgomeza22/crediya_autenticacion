@@ -23,4 +23,10 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     public Mono<Void> saveUser(User user) {
         return super.save(user).then();
     }
+
+    @Override
+    public Mono<User> finByEmail(String email) {
+        return repository.findByEmail(email)
+                .map(super::toEntity);
+    }
 }

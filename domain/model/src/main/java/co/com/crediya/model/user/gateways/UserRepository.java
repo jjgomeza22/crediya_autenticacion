@@ -5,4 +5,5 @@ import reactor.core.publisher.Mono;
 
 public interface UserRepository {
     Mono<Void> saveUser(User user);
+    Mono<User> finByEmail(String email);
 }
