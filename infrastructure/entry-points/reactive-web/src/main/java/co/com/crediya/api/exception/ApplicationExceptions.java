@@ -18,4 +18,12 @@ public class ApplicationExceptions {
     public static <T> Mono<T> missingSalary() {
         return Mono.error(new InvalidInputException("Salary is required"));
     }
+
+    public static <T> Mono<T> invalidEmailFormat() {
+        return Mono.error(new InvalidInputException("Email should have a correct format"));
+    }
+
+    public static <T> Mono<T> invalidSalaryAmount() {
+        return Mono.error(new InvalidInputException("Salary should be between 0 and 15000000"));
+    }
 }
