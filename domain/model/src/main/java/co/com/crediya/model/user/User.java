@@ -1,11 +1,13 @@
 package co.com.crediya.model.user;
-import lombok.Builder;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -20,5 +22,7 @@ public class User {
     private String phoneNumber;
     private Integer roleId;
     private BigDecimal baseSalary;
+    private LocalDate birthDay;
+    private String address;
 
 }
