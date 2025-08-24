@@ -8,13 +8,13 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 @RequiredArgsConstructor
-public class SignUpNewUserUseCase implements IUseCaseMono<User, Void> {
+public class SignUpNewUserUseCase implements IUseCaseMono<User, String> {
     private final UserRepository userRepository;
 
-    public Mono<Void> execute(User user) {
+    public Mono<String> execute(User user) {
         return userRepository.finByEmail(user.getEmail())
                 .flatMap(existingUsr -> ApplicationExceptions.emailAlreadyExist(user.getEmail()))
                 .switchIfEmpty(userRepository.saveUser(user))
-                .then();
+                .cast(String.class);
     }
 }

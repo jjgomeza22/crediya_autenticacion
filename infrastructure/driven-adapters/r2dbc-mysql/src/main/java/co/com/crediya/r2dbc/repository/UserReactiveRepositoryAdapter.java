@@ -1,5 +1,7 @@
 package co.com.crediya.r2dbc.repository;
 
+import co.com.crediya.log.Log;
+import co.com.crediya.log.Status;
 import co.com.crediya.model.user.User;
 import co.com.crediya.model.user.gateways.UserRepository;
 import co.com.crediya.r2dbc.entity.UserEntity;
@@ -25,10 +27,14 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     }
 
     @Override
-    public Mono<Void> saveUser(User user) {
+    public Mono<String> saveUser(User user) {
+        var method = "saveUser";
+        Log.logInfo(method, this.getClass().getCanonicalName(), Status.EXECUTED.name());
         return super.save(user)
+                .doOnNext(usr -> Log.logInfo(method, this.getClass().getCanonicalName(), Status.FINALIZED.name()))
+                .doOnError(err -> Log.logError(method, this.getClass().getCanonicalName(), Status.ERROR.name(), new Exception(err)))
                 .as(transactionalOperator::transactional)
-                .then();
+                .then(Mono.just("OK"));
     }
 
     @Override

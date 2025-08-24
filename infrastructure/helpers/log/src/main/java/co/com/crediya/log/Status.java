@@ -1,7 +1,7 @@
 package co.com.crediya.log;
 
 public enum Status {
-    EXECUTE,
+    EXECUTED,
     FINALIZED,
     ERROR
 }

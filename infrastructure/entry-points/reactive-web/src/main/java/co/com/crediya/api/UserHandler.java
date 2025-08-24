@@ -16,14 +16,14 @@ import reactor.core.publisher.Mono;
 @Component
 @RequiredArgsConstructor
 public class UserHandler {
-    private final IUseCaseMono<User, Void> signUpNewUserUseCase;
+    private final IUseCaseMono<User, String> signUpNewUserUseCase;
     private final UserDtoMapper userDtoMapper;
 
     private static final String EVENT = "saveNewUser";
 
     public Mono<ServerResponse> saveNewUser(ServerRequest request) {
         var endpoint = request.path();
-        Log.logInfo(EVENT, this.getClass().getCanonicalName().concat(endpoint), Status.EXECUTE.name());
+        Log.logInfo(EVENT, this.getClass().getCanonicalName().concat(endpoint), Status.EXECUTED.name());
         return request.bodyToMono(SaveUserDto.class)
                 .transform(RequestValidator.validate())
                 .map(userDtoMapper::toModel)
