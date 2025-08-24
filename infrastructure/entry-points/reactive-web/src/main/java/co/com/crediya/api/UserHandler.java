@@ -3,6 +3,8 @@ package co.com.crediya.api;
 import co.com.crediya.api.dto.SaveUserDto;
 import co.com.crediya.api.mapper.UserDtoMapper;
 import co.com.crediya.api.validator.RequestValidator;
+import co.com.crediya.log.Log;
+import co.com.crediya.log.Status;
 import co.com.crediya.usecase.signupnewuser.SignUpNewUserUseCase;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -16,11 +18,17 @@ public class UserHandler {
     private final SignUpNewUserUseCase signUpNewUserUseCase;
     private final UserDtoMapper userDtoMapper;
 
+    private static final String EVENT = "saveNewUser";
+
     public Mono<ServerResponse> saveNewUser(ServerRequest request) {
+        var endpoint = request.path();
+        Log.logInfo(EVENT, this.getClass().getCanonicalName().concat(endpoint), Status.EXECUTE.name());
         return request.bodyToMono(SaveUserDto.class)
                 .transform(RequestValidator.validate())
                 .map(userDtoMapper::toModel)
                 .flatMap(signUpNewUserUseCase::execute)
-                .flatMap(ServerResponse.ok()::bodyValue);
+                .doOnNext(res -> Log.logInfo(EVENT, this.getClass().getCanonicalName().concat(endpoint), Status.FINALIZED.name()))
+                .flatMap(ServerResponse.ok()::bodyValue)
+                .doOnError(err -> Log.logError(EVENT, this.getClass().getCanonicalName().concat(endpoint), Status.ERROR.name(), new Exception(err)));
     }
 }
