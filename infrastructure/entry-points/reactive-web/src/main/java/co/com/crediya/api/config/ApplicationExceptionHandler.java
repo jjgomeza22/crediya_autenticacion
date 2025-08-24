@@ -19,7 +19,7 @@ public class ApplicationExceptionHandler {
     }
 
     public Mono<ServerResponse> handleException(DuplicateEmailException ex, ServerRequest request) {
-        return handleException(HttpStatus.BAD_REQUEST, ex, request, problemDetail -> problemDetail.setTitle("Invalid Email"));
+        return handleException(HttpStatus.CONFLICT, ex, request, problemDetail -> problemDetail.setTitle("Invalid Email"));
     }
 
     private Mono<ServerResponse> handleException(HttpStatus status, Exception ex, ServerRequest request, Consumer<ProblemDetail> consumer) {
