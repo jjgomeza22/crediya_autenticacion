@@ -6,8 +6,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.reactivecommons.utils.ObjectMapper;
+import org.springframework.transaction.reactive.TransactionalOperator;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -17,6 +19,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserReactiveRepositoryAdapterTest {
+
     @InjectMocks
     UserReactiveRepositoryAdapter repositoryAdapter;
 
@@ -25,6 +28,9 @@ class UserReactiveRepositoryAdapterTest {
 
     @Mock
     ObjectMapper mapper;
+
+    @Mock
+    TransactionalOperator transactionalOperator;
 
     private final User user = User.builder()
             .name("juan")
@@ -48,14 +54,25 @@ class UserReactiveRepositoryAdapterTest {
 
     @Test
     void mustSaveAnUser() {
-        when(mapper.map(userEntity, User.class)).thenReturn(user);
         when(mapper.map(user, UserEntity.class)).thenReturn(userEntity);
+        when(repository.save(Mockito.any(UserEntity.class))).thenReturn(Mono.just(userEntity));
+        when(transactionalOperator.transactional(Mockito.any(Mono.class))).thenReturn(Mono.just(userEntity));
 
-        when(repository.save(userEntity)).thenReturn(Mono.just(userEntity));
+        repositoryAdapter.saveUser(user)
+                .as(StepVerifier::create)
+                .expectNext("OK")
+                .verifyComplete();
+    }
 
-        Mono<Void> result = repositoryAdapter.saveUser(user);
+    @Test
+    void shouldFindUserByEmail() {
 
-        StepVerifier.create(result)
+        when(mapper.map(userEntity, User.class)).thenReturn(user);
+        when(repository.findByEmail(Mockito.anyString())).thenReturn(Mono.just(userEntity));
+
+        repositoryAdapter.finByEmail(user.getEmail())
+                .as(StepVerifier::create)
+                .expectNextMatches(usr -> usr.getEmail().equals(user.getEmail()))
                 .verifyComplete();
     }
 }

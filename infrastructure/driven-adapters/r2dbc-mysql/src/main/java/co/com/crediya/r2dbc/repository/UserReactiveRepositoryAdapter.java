@@ -30,7 +30,7 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     public Mono<String> saveUser(User user) {
         var method = "saveUser";
         Log.logInfo(method, this.getClass().getCanonicalName(), Status.EXECUTED.name());
-        return super.save(user)
+        return repository.save(toData(user))
                 .doOnNext(usr -> Log.logInfo(method, this.getClass().getCanonicalName(), Status.FINALIZED.name()))
                 .doOnError(err -> Log.logError(method, this.getClass().getCanonicalName(), Status.ERROR.name(), new Exception(err)))
                 .as(transactionalOperator::transactional)
