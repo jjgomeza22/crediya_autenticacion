@@ -40,7 +40,7 @@ public class UserHandler {
                 .doOnError(err -> Log.logError(Event.SAVE_USER, this.getClass().getCanonicalName().concat(endpoint), Status.ERROR.name(), new Exception(err)));
     }
 
-    @PreAuthorize("hasAuthority('ADVISOR')")
+    @PreAuthorize("hasAnyAuthority('ADVISOR', 'CLIENT')")
     public Mono<ServerResponse> getUsersByEmail(ServerRequest request) {
         var emails = request.queryParam(Param.EMAILS)
                 .map(param -> Arrays.asList(param.split(",")))
