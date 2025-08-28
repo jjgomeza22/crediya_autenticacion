@@ -32,7 +32,7 @@ public class JwtFilter implements WebFilter {
             return Mono.error(new RuntimeException("invalid auth"));
         }
 
-        String token = auth.replace("Bearer", "");
+        String token = auth.replace("Bearer ", "");
 
         exchange.getAttributes().put("token", token);
         return chain.filter(exchange);

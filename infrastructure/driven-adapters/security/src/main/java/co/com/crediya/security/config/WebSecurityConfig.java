@@ -3,6 +3,7 @@ package co.com.crediya.security.config;
 import co.com.crediya.security.jwt.JwtFilter;
 import co.com.crediya.security.repository.SecurityContextRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.SecurityWebFiltersOrder;
@@ -16,6 +17,7 @@ public class WebSecurityConfig {
     private final SecurityContextRepository securityContextRepository;
     private final JwtFilter jwtFilter;
 
+    @Bean
     public SecurityWebFilterChain filterChain(ServerHttpSecurity http) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
