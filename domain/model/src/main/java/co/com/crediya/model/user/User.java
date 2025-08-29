@@ -24,5 +24,6 @@ public class User {
     private BigDecimal baseSalary;
     private LocalDate birthDay;
     private String address;
+    private String password;
 
 }

@@ -41,4 +41,6 @@ public class UserEntity {
     private LocalDate birthDay;
     @Column("direccion")
     private String address;
+    @Column("contrasena")
+    private String password;
 }

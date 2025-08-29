@@ -12,6 +12,7 @@ public record SaveUserDto(
         Integer roleId,
         BigDecimal baseSalary,
         LocalDate birthDay,
-        String address
+        String address,
+        String password
 ) {
 }
