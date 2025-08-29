@@ -1,5 +1,6 @@
-package co.com.crediya.api;
+package co.com.crediya.api.router;
 
+import co.com.crediya.api.handler.UserHandler;
 import co.com.crediya.api.config.ApplicationExceptionHandler;
 import co.com.crediya.api.dto.SaveUserDto;
 import co.com.crediya.api.exception.InvalidInputException;
@@ -24,7 +25,7 @@ import java.net.URI;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
-public class RouterRest {
+public class UserRouter {
     @Bean
     @RouterOperations({
             @RouterOperation(
@@ -74,7 +75,7 @@ public class RouterRest {
             )
     })
 
-    public RouterFunction<ServerResponse> routerFunction(UserHandler handler, ApplicationExceptionHandler exceptionHandler) {
+    public RouterFunction<ServerResponse> userRouterFunction(UserHandler handler, ApplicationExceptionHandler exceptionHandler) {
         return route()
                 .GET("/", req -> ServerResponse.permanentRedirect(URI.create("/swagger-ui.html")).build())
                 .POST("/api/v1/usuarios", handler::saveNewUser)

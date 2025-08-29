@@ -1,5 +1,7 @@
 package co.com.crediya.api;
 
+import co.com.crediya.api.handler.UserHandler;
+import co.com.crediya.api.router.UserRouter;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 
-@ContextConfiguration(classes = {RouterRest.class, UserHandler.class})
+@ContextConfiguration(classes = {UserRouter.class, UserHandler.class})
 @WebFluxTest
 class RouterRestTest {
 
