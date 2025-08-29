@@ -2,6 +2,7 @@ package co.com.crediya.r2dbc.repository;
 
 import co.com.crediya.log.Log;
 import co.com.crediya.log.Status;
+import co.com.crediya.model.role.RoleName;
 import co.com.crediya.model.user.User;
 import co.com.crediya.model.user.gateways.UserRepository;
 import co.com.crediya.r2dbc.entity.UserEntity;
@@ -40,6 +41,10 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
     @Override
     public Mono<User> finByEmail(String email) {
         return repository.findByEmail(email)
-                .map(super::toEntity);
+                .map(usr -> {
+                    var user = toEntity(usr);
+                    user.setRole(RoleName.fromId(usr.getRoleId()));
+                    return user;
+                });
     }
 }

@@ -1,5 +1,7 @@
 package co.com.crediya.api.dto;
 
+import co.com.crediya.model.role.RoleName;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -9,7 +11,7 @@ public record SaveUserDto(
         String email,
         String documentId,
         String phoneNumber,
-        Integer roleId,
+        RoleName role,
         BigDecimal baseSalary,
         LocalDate birthDay,
         String address,
