@@ -1,10 +1,7 @@
 package co.com.crediya.api.router;
 
-import co.com.crediya.api.handler.UserHandler;
-import co.com.crediya.api.config.ApplicationExceptionHandler;
 import co.com.crediya.api.dto.SaveUserDto;
-import co.com.crediya.api.exception.InvalidInputException;
-import co.com.crediya.usecase.exception.DuplicateEmailException;
+import co.com.crediya.api.handler.UserHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -75,12 +72,10 @@ public class UserRouter {
             )
     })
 
-    public RouterFunction<ServerResponse> userRouterFunction(UserHandler handler, ApplicationExceptionHandler exceptionHandler) {
+    public RouterFunction<ServerResponse> userRouterFunction(UserHandler handler) {
         return route()
                 .GET("/", req -> ServerResponse.permanentRedirect(URI.create("/swagger-ui.html")).build())
-                .POST("/api/v1/usuarios", handler::saveNewUser)
-                .onError(InvalidInputException.class, exceptionHandler::handleException)
-                .onError(DuplicateEmailException.class, exceptionHandler::handleException)
+                .POST("/usuarios", handler::saveNewUser)
                 .build();
     }
 }
