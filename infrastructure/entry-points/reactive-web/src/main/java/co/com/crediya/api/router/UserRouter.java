@@ -4,7 +4,7 @@ import co.com.crediya.api.handler.UserHandler;
 import co.com.crediya.api.config.ApplicationExceptionHandler;
 import co.com.crediya.api.dto.SaveUserDto;
 import co.com.crediya.api.exception.InvalidInputException;
-import co.com.crediya.usecase.signupnewuser.exception.DuplicateEmailException;
+import co.com.crediya.usecase.exception.DuplicateEmailException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;

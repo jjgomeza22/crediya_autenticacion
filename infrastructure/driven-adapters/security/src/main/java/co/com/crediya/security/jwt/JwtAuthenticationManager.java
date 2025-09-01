@@ -1,5 +1,6 @@
 package co.com.crediya.security.jwt;
 
+import co.com.crediya.security.exception.InvalidAuthException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
@@ -24,7 +25,7 @@ public class JwtAuthenticationManager implements ReactiveAuthenticationManager {
         return Mono.just(authentication)
                 .map(auth -> jwtProvider.getClaims(auth.getCredentials().toString()))
                 .log()
-                .onErrorResume(e -> Mono.error(new Exception("bad token")))
+                .onErrorResume(e -> Mono.error(new InvalidAuthException("Bad token")))
                 .map(claims -> new UsernamePasswordAuthenticationToken(
                         claims.getSubject(),
                         null,

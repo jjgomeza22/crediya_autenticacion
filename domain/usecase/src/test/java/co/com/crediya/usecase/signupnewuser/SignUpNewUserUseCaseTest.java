@@ -2,7 +2,7 @@ package co.com.crediya.usecase.signupnewuser;
 
 import co.com.crediya.model.user.User;
 import co.com.crediya.model.user.gateways.UserRepository;
-import co.com.crediya.usecase.signupnewuser.exception.DuplicateEmailException;
+import co.com.crediya.usecase.exception.DuplicateEmailException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

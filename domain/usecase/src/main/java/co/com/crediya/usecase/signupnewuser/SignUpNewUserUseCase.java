@@ -3,7 +3,7 @@ package co.com.crediya.usecase.signupnewuser;
 import co.com.crediya.model.user.User;
 import co.com.crediya.model.user.gateways.UserRepository;
 import co.com.crediya.usecase.IUseCaseMono;
-import co.com.crediya.usecase.signupnewuser.exception.ApplicationExceptions;
+import co.com.crediya.usecase.exception.ApplicationExceptions;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 

@@ -40,11 +40,15 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
 
     @Override
     public Mono<User> finByEmail(String email) {
+        var method = "finByEmail";
+        Log.logInfo(method, this.getClass().getCanonicalName(), Status.EXECUTED.name());
         return repository.findByEmail(email)
                 .map(usr -> {
                     var user = toEntity(usr);
                     user.setRole(RoleName.fromId(usr.getRoleId()));
                     return user;
-                });
+                })
+                .doOnNext(usr -> Log.logInfo(method, this.getClass().getCanonicalName(), Status.FINALIZED.name()))
+                .doOnError(err -> Log.logError(method, this.getClass().getCanonicalName(), Status.ERROR.name(), new Exception(err)));
     }
 }

@@ -6,6 +6,7 @@ import co.com.crediya.model.token.TokenResponse;
 import co.com.crediya.model.token.gateways.TokenProviderPort;
 import co.com.crediya.model.user.gateways.UserRepository;
 import co.com.crediya.usecase.IUseCaseMono;
+import co.com.crediya.usecase.exception.ApplicationExceptions;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
@@ -19,7 +20,7 @@ public class LoginUserUseCase implements IUseCaseMono<Login, TokenResponse> {
     public Mono<TokenResponse> execute(Login request) {
         return userRepository.finByEmail(request.getEmail())
                 .filter(usr -> passwordEncoder.matches(request.getPassword(), usr.getPassword()))
-                .switchIfEmpty(Mono.error(new Throwable("bad credentials")))
+                .switchIfEmpty(ApplicationExceptions.invalidCredentials())
                 .flatMap(tokenProvider::generateToken)
                 .map(TokenResponse::new);
     }

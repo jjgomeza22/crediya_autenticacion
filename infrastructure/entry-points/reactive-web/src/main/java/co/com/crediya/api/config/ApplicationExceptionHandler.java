@@ -1,7 +1,9 @@
 package co.com.crediya.api.config;
 
 import co.com.crediya.api.exception.InvalidInputException;
-import co.com.crediya.usecase.signupnewuser.exception.DuplicateEmailException;
+import co.com.crediya.security.exception.InvalidAuthException;
+import co.com.crediya.usecase.exception.DuplicateEmailException;
+import co.com.crediya.usecase.exception.InvalidCredentialsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,14 @@ public class ApplicationExceptionHandler {
 
     public Mono<ServerResponse> handleException(DuplicateEmailException ex, ServerRequest request) {
         return handleException(HttpStatus.CONFLICT, ex, request, problemDetail -> problemDetail.setTitle("Invalid Email"));
+    }
+
+    public Mono<ServerResponse> handleException(InvalidAuthException ex, ServerRequest request) {
+        return handleException(HttpStatus.UNAUTHORIZED, ex, request, problemDetail -> problemDetail.setTitle("Invalid auth"));
+    }
+
+    public Mono<ServerResponse> handleException(InvalidCredentialsException ex, ServerRequest request) {
+        return handleException(HttpStatus.UNAUTHORIZED, ex, request, problemDetail -> problemDetail.setTitle("Bad credentials"));
     }
 
     private Mono<ServerResponse> handleException(HttpStatus status, Exception ex, ServerRequest request, Consumer<ProblemDetail> consumer) {

@@ -1,5 +1,6 @@
 package co.com.crediya.security.jwt;
 
+import co.com.crediya.security.exception.InvalidAuthException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.reactive.ServerHttpRequest;
@@ -19,17 +20,17 @@ public class JwtFilter implements WebFilter {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getPath().value();
 
-        if (path.contains("auth")) {
+        if (path.contains("login")) {
             return chain.filter(exchange);
         }
 
         String auth = request.getHeaders().getFirst(HttpHeaders.AUTHORIZATION);
         if (Objects.isNull(auth)) {
-            return Mono.error(new RuntimeException("no token was found"));
+            return Mono.error(new InvalidAuthException("No token was found"));
         }
 
-        if (!auth.startsWith("bearer ")) {
-            return Mono.error(new RuntimeException("invalid auth"));
+        if (!auth.startsWith("Bearer ")) {
+            return Mono.error(new InvalidAuthException("Token is missing or invalid"));
         }
 
         String token = auth.replace("Bearer ", "");
