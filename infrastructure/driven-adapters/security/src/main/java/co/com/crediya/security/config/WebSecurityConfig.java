@@ -28,6 +28,15 @@ public class WebSecurityConfig {
                 .logout(ServerHttpSecurity.LogoutSpec::disable)
                 .authorizeExchange(exchange -> exchange
                         .pathMatchers("/login").permitAll()
+                        .pathMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/api-docs/**",
+                                "/webjars/**",
+                                "swagger-resources/**",
+                                "/v3/api-docs"
+                        ).permitAll()
                         .anyExchange().authenticated()
                 )
                 .addFilterAfter(jwtFilter, SecurityWebFiltersOrder.FIRST)

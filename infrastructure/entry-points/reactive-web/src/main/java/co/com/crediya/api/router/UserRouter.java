@@ -71,7 +71,6 @@ public class UserRouter {
                     )
             )
     })
-
     public RouterFunction<ServerResponse> userRouterFunction(UserHandler handler) {
         return route()
                 .GET("/", req -> ServerResponse.permanentRedirect(URI.create("/swagger-ui.html")).build())

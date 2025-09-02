@@ -20,7 +20,7 @@ public class JwtFilter implements WebFilter {
         ServerHttpRequest request = exchange.getRequest();
         String path = request.getPath().value();
 
-        if (path.contains("login")) {
+        if (path.contains("login") || path.contains("swagger") || path.contains("docs")) {
             return chain.filter(exchange);
         }
 
