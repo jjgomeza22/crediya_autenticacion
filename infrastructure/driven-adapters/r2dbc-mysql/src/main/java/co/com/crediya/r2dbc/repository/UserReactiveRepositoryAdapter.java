@@ -51,4 +51,11 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
                 .doOnNext(usr -> Log.logInfo(method, this.getClass().getCanonicalName(), Status.FINALIZED.name()))
                 .doOnError(err -> Log.logError(method, this.getClass().getCanonicalName(), Status.ERROR.name(), new Exception(err)));
     }
+
+    @Override
+    protected UserEntity toData(User user) {
+        var data = super.toData(user);
+        data.setRoleId(user.getRole().getId());
+        return data;
+    }
 }

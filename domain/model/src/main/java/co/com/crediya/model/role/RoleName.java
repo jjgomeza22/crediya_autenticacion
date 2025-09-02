@@ -1,5 +1,8 @@
 package co.com.crediya.model.role;
 
+import lombok.Getter;
+
+@Getter
 public enum RoleName {
     ADMIN(1),
     ADVISOR(2),
