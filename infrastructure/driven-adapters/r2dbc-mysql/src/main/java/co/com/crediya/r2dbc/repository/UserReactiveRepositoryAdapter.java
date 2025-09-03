@@ -10,7 +10,10 @@ import co.com.crediya.r2dbc.helper.ReactiveAdapterOperations;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.reactive.TransactionalOperator;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Repository
 public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
@@ -49,6 +52,16 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
                     return user;
                 })
                 .doOnNext(usr -> Log.logInfo(method, this.getClass().getCanonicalName(), Status.FINALIZED.name()))
+                .doOnError(err -> Log.logError(method, this.getClass().getCanonicalName(), Status.ERROR.name(), new Exception(err)));
+    }
+
+    @Override
+    public Flux<User> findUsersByEmail(List<String> emails) {
+        var method = "findUsersByEmail";
+        Log.logInfo(method, this.getClass().getCanonicalName(), Status.EXECUTED.name());
+        return repository.findByEmailIn(emails)
+                .map(super::toEntity)
+                .doOnComplete(() -> Log.logInfo(method, this.getClass().getCanonicalName(), Status.FINALIZED.name()))
                 .doOnError(err -> Log.logError(method, this.getClass().getCanonicalName(), Status.ERROR.name(), new Exception(err)));
     }
 

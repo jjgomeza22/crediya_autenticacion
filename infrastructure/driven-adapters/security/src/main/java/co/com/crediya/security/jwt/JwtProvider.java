@@ -27,7 +27,7 @@ public class JwtProvider implements TokenProviderPort {
     @Override
     public Mono<String> generateToken(User user) {
         return Mono.fromCallable(() -> Jwts.builder()
-                .subject(user.getName())
+                .subject(user.getEmail())
                 .claim("roles", Stream.of(user.getRole().toString()).map(SimpleGrantedAuthority::new).toList())
                 .issuedAt(new Date())
                 .expiration(new Date(new Date().getTime() + expiration * 1000L))
