@@ -1,5 +1,6 @@
 package co.com.crediya.api.router;
 
+import co.com.crediya.api.config.AuthPath;
 import co.com.crediya.api.dto.LoginDto;
 import co.com.crediya.api.handler.AuthHandler;
 import co.com.crediya.model.token.TokenResponse;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +25,10 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
+@RequiredArgsConstructor
 public class AuthRouter {
+    private final AuthPath authPath;
+
     @Bean
     @RouterOperation(
             path = "/login",
@@ -81,7 +86,7 @@ public class AuthRouter {
     )
     public RouterFunction<ServerResponse> authRouterFunction(AuthHandler handler) {
         return route()
-                .POST("/login", handler::loginUser)
+                .POST(authPath.getLogin(), handler::loginUser)
                 .build();
     }
 }

@@ -3,6 +3,7 @@ package co.com.crediya.security.config;
 import co.com.crediya.security.jwt.JwtFilter;
 import co.com.crediya.security.repository.SecurityContextRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableReactiveMethodSecurity;
@@ -20,14 +21,16 @@ public class WebSecurityConfig {
     private final JwtFilter jwtFilter;
 
     @Bean
-    public SecurityWebFilterChain filterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain filterChain(
+            ServerHttpSecurity http, @Value("${routes.paths.login}") String loginPath
+    ) {
         return http
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
                 .formLogin(ServerHttpSecurity.FormLoginSpec::disable)
                 .httpBasic(ServerHttpSecurity.HttpBasicSpec::disable)
                 .logout(ServerHttpSecurity.LogoutSpec::disable)
                 .authorizeExchange(exchange -> exchange
-                        .pathMatchers("/login").permitAll()
+                        .pathMatchers(loginPath).permitAll()
                         .pathMatchers(
                                 "/swagger-ui.html",
                                 "/swagger-ui/**",

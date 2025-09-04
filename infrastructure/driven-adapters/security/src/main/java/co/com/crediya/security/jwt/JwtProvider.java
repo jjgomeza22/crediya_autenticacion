@@ -2,6 +2,7 @@ package co.com.crediya.security.jwt;
 
 import co.com.crediya.model.token.gateways.TokenProviderPort;
 import co.com.crediya.model.user.User;
+import co.com.crediya.utils.constants.Constants;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -28,7 +29,7 @@ public class JwtProvider implements TokenProviderPort {
     public Mono<String> generateToken(User user) {
         return Mono.fromCallable(() -> Jwts.builder()
                 .subject(user.getEmail())
-                .claim("roles", Stream.of(user.getRole().toString()).map(SimpleGrantedAuthority::new).toList())
+                .claim(Constants.ROLES, Stream.of(user.getRole().toString()).map(SimpleGrantedAuthority::new).toList())
                 .issuedAt(new Date())
                 .expiration(new Date(new Date().getTime() + expiration * 1000L))
                 .signWith(getKey(secret))

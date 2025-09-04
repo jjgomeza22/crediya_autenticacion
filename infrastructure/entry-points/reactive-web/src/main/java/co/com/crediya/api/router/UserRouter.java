@@ -1,5 +1,6 @@
 package co.com.crediya.api.router;
 
+import co.com.crediya.api.config.UserPath;
 import co.com.crediya.api.dto.SaveUserDto;
 import co.com.crediya.api.handler.UserHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -8,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.RequiredArgsConstructor;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springdoc.core.annotations.RouterOperations;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +24,10 @@ import java.net.URI;
 import static org.springframework.web.reactive.function.server.RouterFunctions.route;
 
 @Configuration
+@RequiredArgsConstructor
 public class UserRouter {
+    private final UserPath userPath;
+
     @Bean
     @RouterOperations({
             @RouterOperation(
@@ -74,8 +79,8 @@ public class UserRouter {
     public RouterFunction<ServerResponse> userRouterFunction(UserHandler handler) {
         return route()
                 .GET("/", req -> ServerResponse.permanentRedirect(URI.create("/swagger-ui.html")).build())
-                .GET("/usuarios", handler::getUsersByEmail)
-                .POST("/usuarios", handler::saveNewUser)
+                .GET(userPath.getUsers(), handler::getUsersByEmail)
+                .POST(userPath.getUsers(), handler::saveNewUser)
                 .build();
     }
 }

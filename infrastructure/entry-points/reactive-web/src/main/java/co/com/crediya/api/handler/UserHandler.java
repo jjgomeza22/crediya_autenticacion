@@ -8,6 +8,8 @@ import co.com.crediya.log.Status;
 import co.com.crediya.model.user.User;
 import co.com.crediya.usecase.IUseCaseMono;
 import co.com.crediya.usecase.getusersbyemail.GetUsersByEmailUseCase;
+import co.com.crediya.utils.constants.Event;
+import co.com.crediya.utils.constants.Param;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
@@ -25,24 +27,22 @@ public class UserHandler {
     private final GetUsersByEmailUseCase getUsersByEmailUseCase;
     private final UserDtoMapper userDtoMapper;
 
-    private static final String EVENT = "saveNewUser";
-
     @PreAuthorize("hasAnyAuthority('ADMIN', 'ADVISOR')")
     public Mono<ServerResponse> saveNewUser(ServerRequest request) {
         var endpoint = request.path();
-        Log.logInfo(EVENT, this.getClass().getCanonicalName().concat(endpoint), Status.EXECUTED.name());
+        Log.logInfo(Event.SAVE_USER, this.getClass().getCanonicalName().concat(endpoint), Status.EXECUTED.name());
         return request.bodyToMono(SaveUserDto.class)
                 .transform(RequestValidator.validate())
                 .map(userDtoMapper::toModel)
                 .flatMap(signUpNewUserUseCase::execute)
-                .doOnNext(res -> Log.logInfo(EVENT, this.getClass().getCanonicalName().concat(endpoint), Status.FINALIZED.name()))
+                .doOnNext(res -> Log.logInfo(Event.SAVE_USER, this.getClass().getCanonicalName().concat(endpoint), Status.FINALIZED.name()))
                 .flatMap(ServerResponse.ok()::bodyValue)
-                .doOnError(err -> Log.logError(EVENT, this.getClass().getCanonicalName().concat(endpoint), Status.ERROR.name(), new Exception(err)));
+                .doOnError(err -> Log.logError(Event.SAVE_USER, this.getClass().getCanonicalName().concat(endpoint), Status.ERROR.name(), new Exception(err)));
     }
 
     @PreAuthorize("hasAuthority('ADVISOR')")
     public Mono<ServerResponse> getUsersByEmail(ServerRequest request) {
-        var emails = request.queryParam("emails")
+        var emails = request.queryParam(Param.EMAILS)
                 .map(param -> Arrays.asList(param.split(",")))
                 .orElse(Collections.emptyList())
                 .stream()
@@ -50,12 +50,12 @@ public class UserHandler {
                 .toList();
 
         var endpoint = request.path();
-        Log.logInfo(EVENT, this.getClass().getCanonicalName().concat(endpoint), Status.EXECUTED.name());
+        Log.logInfo(Event.GET_USERS_BY_EMAIL, this.getClass().getCanonicalName().concat(endpoint), Status.EXECUTED.name());
         return this.getUsersByEmailUseCase.execute(emails)
                 .map(userDtoMapper::toUserByEmail)
                 .collectList()
-                .doOnNext(res -> Log.logInfo(EVENT, this.getClass().getCanonicalName().concat(endpoint), Status.FINALIZED.name()))
+                .doOnNext(res -> Log.logInfo(Event.GET_USERS_BY_EMAIL, this.getClass().getCanonicalName().concat(endpoint), Status.FINALIZED.name()))
                 .flatMap(ServerResponse.ok()::bodyValue)
-                .doOnError(err -> Log.logError(EVENT, this.getClass().getCanonicalName().concat(endpoint), Status.ERROR.name(), new Exception(err)));
+                .doOnError(err -> Log.logError(Event.GET_USERS_BY_EMAIL, this.getClass().getCanonicalName().concat(endpoint), Status.ERROR.name(), new Exception(err)));
     }
 }

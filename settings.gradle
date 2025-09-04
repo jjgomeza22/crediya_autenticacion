@@ -28,3 +28,5 @@ include ':log'
 project(':log').projectDir = file('./infrastructure/helpers/log')
 include ':security'
 project(':security').projectDir = file('./infrastructure/driven-adapters/security')
+include ':utils'
+project(':utils').projectDir = file('./infrastructure/helpers/utils')

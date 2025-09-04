@@ -7,6 +7,8 @@ import co.com.crediya.model.user.User;
 import co.com.crediya.model.user.gateways.UserRepository;
 import co.com.crediya.r2dbc.entity.UserEntity;
 import co.com.crediya.r2dbc.helper.ReactiveAdapterOperations;
+import co.com.crediya.utils.constants.Method;
+import co.com.crediya.utils.constants.StatusResponse;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.reactive.TransactionalOperator;
@@ -32,18 +34,18 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
 
     @Override
     public Mono<String> saveUser(User user) {
-        var method = "saveUser";
+        var method = Method.SAVE_USER;
         Log.logInfo(method, this.getClass().getCanonicalName(), Status.EXECUTED.name());
         return repository.save(toData(user))
                 .doOnNext(usr -> Log.logInfo(method, this.getClass().getCanonicalName(), Status.FINALIZED.name()))
                 .doOnError(err -> Log.logError(method, this.getClass().getCanonicalName(), Status.ERROR.name(), new Exception(err)))
                 .as(transactionalOperator::transactional)
-                .then(Mono.just("OK"));
+                .then(Mono.just(StatusResponse.OK.getValue()));
     }
 
     @Override
     public Mono<User> finByEmail(String email) {
-        var method = "finByEmail";
+        var method = Method.FIND_BY_EMAIL;
         Log.logInfo(method, this.getClass().getCanonicalName(), Status.EXECUTED.name());
         return repository.findByEmail(email)
                 .map(usr -> {
@@ -57,7 +59,7 @@ public class UserReactiveRepositoryAdapter extends ReactiveAdapterOperations<
 
     @Override
     public Flux<User> findUsersByEmail(List<String> emails) {
-        var method = "findUsersByEmail";
+        var method = Method.FIND_USERS_BY_EMAILS;
         Log.logInfo(method, this.getClass().getCanonicalName(), Status.EXECUTED.name());
         return repository.findByEmailIn(emails)
                 .map(super::toEntity)
