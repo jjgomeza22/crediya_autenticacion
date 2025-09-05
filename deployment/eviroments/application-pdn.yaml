@@ -1,0 +1,37 @@
+server:
+  port: ${PORT}
+spring:
+  application:
+    name: "crediYaAutenticacion"
+  devtools:
+    add-properties: false
+  profiles:
+    include: null
+  webflux:
+    base-path: /api/v1
+adapters:
+  r2dbc:
+    host: "localhost"
+    port: 3306
+    database: "autenticacion"
+    username: "app_user"
+    password: "juan*201"
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,prometheus"
+  endpoint:
+    health:
+      probes:
+        enabled: true
+cors:
+  allowed-origins: "http://localhost:4200,http://localhost:8080,http://localhost:8081"
+  allowed-paths: login,swagger,docs
+jwt:
+  secret: secretsecretsecretsecretsecretsecretsecretsecret
+  expiration: 3600
+routes:
+  paths:
+    users: /usuarios
+    login: /login
