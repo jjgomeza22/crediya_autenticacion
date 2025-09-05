@@ -2,8 +2,11 @@ package co.com.crediya.api.router;
 
 import co.com.crediya.api.config.UserPath;
 import co.com.crediya.api.dto.SaveUserDto;
+import co.com.crediya.api.dto.UserByEmailDto;
 import co.com.crediya.api.handler.UserHandler;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -72,6 +75,50 @@ public class UserRouter {
                                                     )
                                             )
                                     )
+                            }
+                    )
+            ),
+            @RouterOperation(
+                    path = "/api/v1/usuarios",
+                    produces = MediaType.APPLICATION_JSON_VALUE,
+                    method = RequestMethod.GET,
+                    beanClass = UserHandler.class,
+                    beanMethod = "getUsersByEmail",
+                    operation = @Operation(
+                            operationId = "getUsersByEmail",
+                            summary = "Retrieve users by email",
+                            description = "Retrieves a list of users based on their email addresses. Emails must be provided as a comma-separated list.",
+                            parameters = {
+                                    @Parameter(
+                                            in = ParameterIn.QUERY,
+                                            name = "emails",
+                                            description = "A comma-separated list of email addresses.",
+                                            required = true,
+                                            schema = @Schema(type = "string"),
+                                            examples = @io.swagger.v3.oas.annotations.media.ExampleObject(
+                                                    name = "Multiple emails",
+                                                    value = "user1@example.com,user2@example.com"
+                                            )
+                                    )
+                            },
+                            security = @io.swagger.v3.oas.annotations.security.SecurityRequirement(name = "BearerAuth"),
+                            responses = {
+                                    @ApiResponse(
+                                            responseCode = "200",
+                                            description = "OK: Users retrieved successfully.",
+                                            content = @Content(
+                                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                                    schema = @Schema(implementation = UserByEmailDto.class)
+                                            )
+                                    ),
+                                    @ApiResponse(
+                                            responseCode = "401",
+                                            description = "Unauthorized: Authentication required."
+                                    ),
+                                    @ApiResponse(
+                                            responseCode = "403",
+                                            description = "Forbidden: User does not have the 'ADVISOR' authority."
+                                    ),
                             }
                     )
             )
