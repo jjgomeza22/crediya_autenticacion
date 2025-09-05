@@ -1,5 +1,6 @@
 package co.com.crediya.r2dbc.repository;
 
+import co.com.crediya.model.role.RoleName;
 import co.com.crediya.model.user.User;
 import co.com.crediya.r2dbc.entity.UserEntity;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ class UserReactiveRepositoryAdapterTest {
             .email("juan@mail.com")
             .documentId("123456")
             .phoneNumber("3154564097")
-            .roleId(1)
+            .role(RoleName.ADMIN)
             .baseSalary(new BigDecimal(2500000))
             .build();
 
