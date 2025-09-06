@@ -11,11 +11,11 @@ spring:
     base-path: /api/v1
 adapters:
   r2dbc:
-    host: "localhost"
-    port: 3306
-    database: "autenticacion"
-    username: "app_user"
-    password: "juan*201"
+    host: ${DB_HOST}
+    port: ${DB_PORT}
+    database: ${DB_DATABASE}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 management:
   endpoints:
     web:
@@ -26,11 +26,11 @@ management:
       probes:
         enabled: true
 cors:
-  allowed-origins: "http://localhost:4200,http://localhost:8080,http://localhost:8081"
+  allowed-origins: ${CONF_ORIGINS}
   allowed-paths: login,swagger,docs
 jwt:
-  secret: secretsecretsecretsecretsecretsecretsecretsecret
-  expiration: 3600
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION}
 routes:
   paths:
     users: /usuarios
