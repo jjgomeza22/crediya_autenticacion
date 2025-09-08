@@ -65,17 +65,17 @@ public class AuthRouter {
                             ),
                             @ApiResponse(
                                     responseCode = "401",
-                                    description = "Conflict: Incorrect credentials",
+                                    description = "Unauthorized",
                                     content = @Content(
                                             mediaType = MediaType.APPLICATION_JSON_VALUE,
                                             examples = @ExampleObject(
                                                     value = """
                                                             {
-                                                              "type": "about:blank",
-                                                              "title": "Invalid Input",
-                                                              "status": 400,
-                                                              "detail": "Email should have a correct format",
-                                                              "instance": "/login"
+                                                                "type": "about:blank",
+                                                                "title": "Bad credentials",
+                                                                "status": 401,
+                                                                "detail": "Incorrect email or password",
+                                                                "instance": "/login"
                                                             }
                                                             """
                                             )

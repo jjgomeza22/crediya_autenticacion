@@ -56,7 +56,20 @@ public class UserRouter {
                                     ),
                                     @ApiResponse(
                                             responseCode = "409",
-                                            description = "Conflict: Email already exists"
+                                            description = "Conflict: Email already exists",
+                                            content = @Content(
+                                                    examples = @ExampleObject(
+                                                            value = """
+                                                                    {
+                                                                        "type": "about:blank",
+                                                                        "title": "Invalid Email",
+                                                                        "status": 409,
+                                                                        "detail": "Email [juan@mail.com] already exists",
+                                                                        "instance": "/usuarios"
+                                                                    }
+                                                                    """
+                                                    )
+                                            )
                                     ),
                                     @ApiResponse(
                                             responseCode = "400",
@@ -113,11 +126,29 @@ public class UserRouter {
                                     ),
                                     @ApiResponse(
                                             responseCode = "401",
-                                            description = "Unauthorized: Authentication required."
+                                            description = "Unauthorized: Authentication required.",
+                                            content = @Content(
+                                                    examples = @ExampleObject(
+                                                            value = """
+                                                                    {
+                                                                        "type": "about:blank",
+                                                                        "title": "Invalid auth",
+                                                                        "status": 401,
+                                                                        "detail": "No token was found",
+                                                                        "instance": "/usuarios"
+                                                                    }
+                                                                    """
+                                                    )
+                                            )
                                     ),
                                     @ApiResponse(
                                             responseCode = "403",
-                                            description = "Forbidden: User does not have the 'ADVISOR' authority."
+                                            description = "Forbidden: User does not have access to this endpoint",
+                                            content = @Content(
+                                                    examples = @ExampleObject(
+                                                            value = "Access Denied"
+                                                    )
+                                            )
                                     ),
                             }
                     )
